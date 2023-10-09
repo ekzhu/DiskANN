@@ -28,6 +28,8 @@ endif()
 
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake;${CMAKE_MODULE_PATH}")
 
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 # Install nuget packages for dependencies.
 if (MSVC)
     find_program(NUGET_EXE NAMES nuget)
@@ -325,3 +327,7 @@ include(clang-format.cmake)
 if(PYBIND)
     add_subdirectory(python)
 endif()
+
+# Create a shared library for the P/Invoke wrapper
+add_library(diskann_wrapper SHARED src/wrapper/dllmain.cpp src/wrapper/pch.cpp)
+target_link_libraries(diskann_wrapper PRIVATE diskann) # Assuming the DiskANN library target is named "diskann"
