@@ -16,14 +16,15 @@ extern "C"
 {
 #endif
 
-    PINVOKELIB_API uint64_t create_in_memory_static_index(const char *data_path, const char *index_path_prefix,
+    PINVOKELIB_API uint64_t create_in_memory_static_index(std::size_t dim, std::size_t max_points,
                                                           const char *data_type, const char *dist_fn,
                                                           uint32_t num_threads, uint32_t R, uint32_t L, float alpha,
-                                                          uint32_t build_PQ_bytes, bool use_opq,
-                                                          const char *label_file = "", const char *universal_label = "",
-                                                          uint32_t Lf = 0, const char *label_type = "uint");
+                                                          uint32_t build_PQ_bytes, bool use_opq);
+    PINVOKELIB_API void build_index(uint64_t index_ptr, std::size_t num_points, const char *data_path);
     PINVOKELIB_API void dispose_index(uint64_t index_ptr);
-    PINVOKELIB_API void query_index(uint64_t index_ptr, float *query, uint32_t k, uint32_t *result_ids,
+    PINVOKELIB_API void load_index(uint64_t index_ptr, const char *index_path, uint32_t num_threads, uint32_t search_l);
+    PINVOKELIB_API void save_index(uint64_t index_ptr, const char *index_path);
+    PINVOKELIB_API void query_index(uint64_t index_ptr, float *query, std::size_t k, uint32_t L, int *result_ids,
                                     float *result_dists);
 
 #ifdef __cplusplus
