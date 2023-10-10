@@ -18,12 +18,13 @@ extern "C"
 
     PINVOKELIB_API uint64_t create_in_memory_static_index(std::size_t dim, std::size_t max_points,
                                                           const char *data_type, const char *dist_fn,
-                                                          uint32_t num_threads, uint32_t R, uint32_t L, float alpha,
-                                                          uint32_t build_PQ_bytes, bool use_opq);
+                                                          uint32_t num_threads, uint32_t R, uint32_t Lf, uint32_t L,
+                                                          float alpha, uint32_t build_PQ_bytes, bool use_opq);
     PINVOKELIB_API void build_index(uint64_t index_ptr, std::size_t num_points, const char *data_path);
     PINVOKELIB_API void dispose_index(uint64_t index_ptr);
     PINVOKELIB_API void load_index(uint64_t index_ptr, const char *index_path, uint32_t num_threads, uint32_t search_l);
     PINVOKELIB_API void save_index(uint64_t index_ptr, const char *index_path);
+    PINVOKELIB_API void optimize_index_layout(uint64_t index_ptr);
     PINVOKELIB_API void query_index(uint64_t index_ptr, float *query, std::size_t k, uint32_t L, int *result_ids,
                                     float *result_dists);
 
