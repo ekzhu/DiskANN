@@ -165,13 +165,13 @@ PINVOKELIB_API void optimize_index_layout(uint64_t index_ptr)
     it->second->optimize_index_layout();
 }
 
-PINVOKELIB_API void query_index(uint64_t index_ptr, float *query, const size_t k, const uint32_t L, int *result_ids,
-                                float *result_dists)
+PINVOKELIB_API void query_index(uint64_t index_ptr, float *query, const size_t k, const uint32_t L,
+                                uint32_t *result_ids, float *result_dists)
 {
     auto it = g_index_map.find(index_ptr);
     if (it == g_index_map.end())
     {
         throw diskann::ANNException("Index not found", -1, __FUNCSIG__, __FILE__, __LINE__);
     }
-    it->second->search<float, int>(query, k, L, result_ids, result_dists);
+    it->second->search<float, uint32_t>(query, k, L, result_ids, result_dists);
 }
