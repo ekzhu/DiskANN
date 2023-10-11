@@ -155,16 +155,6 @@ PINVOKELIB_API void save_index(uint64_t index_ptr, const char *index_path)
     it->second->save(index_path);
 }
 
-PINVOKELIB_API void optimize_index_layout(uint64_t index_ptr)
-{
-    auto it = g_index_map.find(index_ptr);
-    if (it == g_index_map.end())
-    {
-        throw diskann::ANNException("Index not found", -1, __FUNCSIG__, __FILE__, __LINE__);
-    }
-    it->second->optimize_index_layout();
-}
-
 PINVOKELIB_API void query_index(uint64_t index_ptr, float *query, const size_t k, const uint32_t L,
                                 uint32_t *result_ids, float *result_dists)
 {

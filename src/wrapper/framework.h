@@ -24,7 +24,6 @@ extern "C"
     PINVOKELIB_API void dispose_index(uint64_t index_ptr);
     PINVOKELIB_API void load_index(uint64_t index_ptr, const char *index_path, uint32_t num_threads, uint32_t search_l);
     PINVOKELIB_API void save_index(uint64_t index_ptr, const char *index_path);
-    PINVOKELIB_API void optimize_index_layout(uint64_t index_ptr);
     PINVOKELIB_API void query_index(uint64_t index_ptr, float *query, std::size_t k, uint32_t L, uint32_t *result_ids,
                                     float *result_dists);
 
