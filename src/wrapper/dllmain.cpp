@@ -170,7 +170,7 @@ PINVOKELIB_API uint64_t create_in_memory_dynamic_index(std::size_t dim, std::siz
     return index_id;
 }
 
-PINVOKELIB_API void build_index(uint64_t index_ptr, size_t num_points, const char *data_path)
+PINVOKELIB_API void build_static(uint64_t index_ptr, float *data, uint32_t *ids, size_t num_points)
 {
     auto it = g_index_map.find(index_ptr);
     if (it == g_index_map.end())
@@ -181,9 +181,9 @@ PINVOKELIB_API void build_index(uint64_t index_ptr, size_t num_points, const cha
     std::vector<uint32_t> tags(num_points);
     for (uint32_t i = 0; i < num_points; i++)
     {
-        tags[i] = i;
+        tags[i] = ids[i];
     }
-    index->build(data_path, num_points, tags);
+    index->build(data, num_points, tags);
 }
 
 PINVOKELIB_API void load_index(uint64_t index_ptr, const char *index_path, uint32_t num_threads, uint32_t search_l)
