@@ -186,6 +186,17 @@ PINVOKELIB_API void build_static(uint64_t index_ptr, float *data, uint32_t *ids,
     index->build(data, num_points, tags);
 }
 
+PINVOKELIB_API void build_dynamic(uint64_t index_ptr, float startPointNorm)
+{
+    auto it = g_index_map.find(index_ptr);
+    if (it == g_index_map.end())
+    {
+        throw diskann::ANNException("Index not found", -1, __FUNCSIG__, __FILE__, __LINE__);
+    }
+    auto index = it->second.get();
+    index->set_start_points_at_random(startPointNorm);
+}
+
 PINVOKELIB_API void load_index(uint64_t index_ptr, const char *index_path, uint32_t num_threads, uint32_t search_l)
 {
     auto it = g_index_map.find(index_ptr);
