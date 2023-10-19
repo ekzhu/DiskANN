@@ -110,8 +110,8 @@ PINVOKELIB_API uint64_t create_in_memory_static_index(size_t dim, size_t max_poi
 }
 
 PINVOKELIB_API uint64_t create_in_memory_dynamic_index(std::size_t dim, std::size_t max_points, const char *data_type,
-                                                       const char *dist_fn, uint32_t R, uint32_t L, float alpha,
-                                                       uint32_t C)
+                                                       const char *dist_fn, uint32_t num_threads, uint32_t R,
+                                                       uint32_t L, float alpha, uint32_t C, float startPointNorm)
 {
     const bool saturate_graph = false;
     bool has_labels = false;
@@ -142,11 +142,13 @@ PINVOKELIB_API uint64_t create_in_memory_dynamic_index(std::size_t dim, std::siz
         return -1;
     }
 
-    diskann::IndexWriteParameters params = diskann::IndexWriteParametersBuilder(L, R)
-                                               .with_max_occlusion_size(C)
-                                               .with_alpha(alpha)
-                                               .with_saturate_graph(saturate_graph)
-                                               .build();
+    auto params = diskann::IndexWriteParametersBuilder(L, R)
+                      .with_max_occlusion_size(C)
+                      .with_alpha(alpha)
+                      .with_num_threads(num_threads)
+                      .with_saturate_graph(saturate_graph)
+                      .build();
+    auto index_search_params = diskann::IndexSearchParams(L, num_threads);
     auto config = diskann::IndexConfigBuilder()
                       .with_metric(metric)
                       .with_dimension(dim)
@@ -160,11 +162,14 @@ PINVOKELIB_API uint64_t create_in_memory_dynamic_index(std::size_t dim, std::siz
                       .with_tag_type(diskann_type_to_name<uint32_t>())
                       .with_data_type(data_type)
                       .with_index_write_params(params)
+                      .with_index_search_params(index_search_params)
                       .with_data_load_store_strategy(diskann::DataStoreStrategy::MEMORY)
                       .with_graph_load_store_strategy(diskann::GraphStoreStrategy::MEMORY)
                       .build();
-    diskann::IndexFactory index_factory = diskann::IndexFactory(config);
+    auto index_factory = diskann::IndexFactory(config);
     auto index = index_factory.create_instance();
+    index->set_start_points_at_random(startPointNorm);
+
     uint64_t index_id = g_next_index_id++;
     g_index_map[index_id] = std::move(index);
     return index_id;
@@ -184,17 +189,6 @@ PINVOKELIB_API void build_static(uint64_t index_ptr, float *data, uint32_t *ids,
         tags[i] = ids[i];
     }
     index->build(data, num_points, tags);
-}
-
-PINVOKELIB_API void build_dynamic(uint64_t index_ptr, float startPointNorm)
-{
-    auto it = g_index_map.find(index_ptr);
-    if (it == g_index_map.end())
-    {
-        throw diskann::ANNException("Index not found", -1, __FUNCSIG__, __FILE__, __LINE__);
-    }
-    auto index = it->second.get();
-    index->set_start_points_at_random(startPointNorm);
 }
 
 PINVOKELIB_API void load_index(uint64_t index_ptr, const char *index_path, uint32_t num_threads, uint32_t search_l)

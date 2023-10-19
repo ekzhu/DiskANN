@@ -22,10 +22,9 @@ extern "C"
                                                           uint32_t L, float alpha, uint32_t build_PQ_bytes,
                                                           bool use_opq);
     PINVOKELIB_API uint64_t create_in_memory_dynamic_index(size_t dim, size_t max_points, const char *data_type,
-                                                           const char *dist_fn, uint32_t R, uint32_t L, float alpha,
-                                                           uint32_t C);
+                                                           const char *dist_fn, uint32_t num_threads, uint32_t R,
+                                                           uint32_t L, float alpha, uint32_t C, float startPointNorm);
     PINVOKELIB_API void build_static(uint64_t index_ptr, float *data, uint32_t *ids, size_t num_points);
-    PINVOKELIB_API void build_dynamic(uint64_t index_ptr, float startPointNorm);
     PINVOKELIB_API void dispose_index(uint64_t index_ptr);
     PINVOKELIB_API void load_index(uint64_t index_ptr, const char *index_path, uint32_t num_threads, uint32_t search_l);
     PINVOKELIB_API void save_index(uint64_t index_ptr, const char *index_path);
