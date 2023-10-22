@@ -255,7 +255,7 @@ PINVOKELIB_API void lazy_delete_point(uint64_t index_ptr, uint32_t point_id)
     it->second->lazy_delete(point_id);
 }
 
-PINVOKELIB_API void consolidate_deletes(uint64_t index_ptr, uint32_t num_threads, uint32_t L, uint32_t R, float alpha,
+PINVOKELIB_API void consolidate_deletes(uint64_t index_ptr, uint32_t num_threads, uint32_t R, uint32_t L, float alpha,
                                         uint32_t C)
 {
     auto it = g_index_map.find(index_ptr);

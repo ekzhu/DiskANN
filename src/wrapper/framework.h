@@ -30,7 +30,7 @@ extern "C"
     PINVOKELIB_API void save_index(uint64_t index_ptr, const char *index_path);
     PINVOKELIB_API void insert_point(uint64_t index_ptr, uint32_t point_id, float *point);
     PINVOKELIB_API void lazy_delete_point(uint64_t index_ptr, uint32_t point_id);
-    PINVOKELIB_API void consolidate_deletes(uint64_t index_ptr, uint32_t num_threads, uint32_t L, uint32_t R,
+    PINVOKELIB_API void consolidate_deletes(uint64_t index_ptr, uint32_t num_threads, uint32_t R, uint32_t L,
                                             float alpha, uint32_t C);
     PINVOKELIB_API void query_point(uint64_t index_ptr, float *query, size_t k, uint32_t L, uint32_t *result_ids,
                                     float *result_dists);
